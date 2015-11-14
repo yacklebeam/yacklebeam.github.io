@@ -133,9 +133,10 @@
 		w: 20,
         h: 20,
         r: 0,
-        point1 : {x: 10, y: 0},
+        point1 : {x: 15, y: 0},
         point2 : {x: -10, y: 10},
         point3 : {x: -10, y: -10},
+        point4 : {x: -10, y: 0},
         
         init: function() {
             this.x = 390;
@@ -151,8 +152,8 @@
         	var theSin = Math.sin(angle * Math.PI / 180);
 
         	this.point1 = {
-        			x: (10 * theCos) - (0  * theSin),
-        			y: (0  * theCos) + (10 * theSin)
+        			x: (15 * theCos) - (0  * theSin),
+        			y: (0  * theCos) + (15 * theSin)
         		};
         	this.point2 = {
         			x: (-10 * theCos) - (10  * theSin),
@@ -161,6 +162,10 @@
         	this.point3 = {
         			x: (-10 * theCos) - (-10 * theSin),
         			y: (-10 * theCos) + (-10 * theSin)
+        		};
+        	this.point4 = {
+        			x: (-10 * theCos) - (0 * theSin),
+        			y: (0 * theCos) + (-10 * theSin)
         		};
         },
 
@@ -180,6 +185,12 @@
             ctx.lineTo(this.x + this.point3.x, this.y + this.point3.y);
             ctx.closePath();
             ctx.fill();
+
+            ctx.beginPath();
+        	ctx.arc(this.x + this.point4.x,this.y + this.point4.y, 3, 0, 2 * Math.PI);
+        	ctx.closePath();
+        	ctx.fillStyle = 'orange';
+        	ctx.fill();
         },
 
         move: function() {
