@@ -81,7 +81,7 @@
 		},
 
 		gamewin: function() {
-            this.text = 'You Win';
+            this.text = 'You Win (Score: ' + Hud.score + ')';
             this.textSub = 'Click To Play Again';
             this.textColor = 'green';
 
@@ -286,13 +286,14 @@
 		collide : function(index) {
 			var B = this.ents[index];
 			var i;
-			for(i = 0; i < Asteroids.count; i++) {
+			for(i = 0; i < 30; i++) {
 				var A = Asteroids.ents[i];
 				if(	A &&
 					Math.sqrt(	(B.x - A.x) * (B.x - A.x) +
-								(B.y - A.y) * (B.y - A.y)) < 23) { //hitting asteroid
+								(B.y - A.y) * (B.y - A.y)) < A.r + 3) { //hitting asteroid
 					this.ents[index] = null;
 					this.current--;
+                    Asteroids.explode(i);
 					Asteroids.ents[i] = null;
 					Asteroids.current--;
 					Hud.score++;
@@ -337,7 +338,7 @@
 
 		init : function() {
 			this.current = this.count;
-			this.ents = [this.count];
+			this.ents = [30];
 			var i;
 			for(i = 0; i < this.count; i++) {
 				var X = this.getRandomInt(20, 780);
@@ -346,14 +347,14 @@
 				var Xs = this.getRandomInt(-2,2);
 				var Ys = this.getRandomInt(-2,2);
 
-				this.addAsteroid(i, X, Y, Xs, Ys);
+				this.addAsteroid(i, X, Y, Xs, Ys, 2);
 			}
 		},
 
 		draw : function() {
         	if(Game.gameOver) return;
 			var i;
-			for(i = 0; i < this.count; i++) {
+			for(i = 0; i < 30; i++) {
 				var A = this.ents[i];
 
 				if(A) {
@@ -391,19 +392,34 @@
 			}
 		},
 
-		explode : function() {
+		explode : function(index) {
+            var newIndex = index * 2 + 10;
 
-		},
+            var Parent = this.ents[index];
 
-		addAsteroid : function(i, xIn, yIn, xsIn, ysIn) {
+            if(Parent.life > 1) {
+                var Xs = this.getRandomInt(-2,2);
+                var Ys = this.getRandomInt(-2,2);
+                this.addAsteroid(newIndex, Parent.x, Parent.y, Xs, Ys, Parent.life - 1);
+
+                var Xs2 = this.getRandomInt(-2,2);
+                var Ys2 = this.getRandomInt(-2,2);
+                this.addAsteroid(newIndex + 1, Parent.x, Parent.y, Xs2, Ys2, Parent.life - 1);
+
+                this.current+=2;
+            }
+    	},
+
+		addAsteroid : function(i, xIn, yIn, xsIn, ysIn, lifeIn) {
 			var open = i;
 			
 			this.ents[open] = {
 				x : xIn,
 				y : yIn,
-				r : 20,
+				r : lifeIn * 10,
 				xs : xsIn,
         		ys : ysIn,
+                life: lifeIn
 			};
 		}
 	};
