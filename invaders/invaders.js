@@ -35,8 +35,8 @@
         init: function() {
             this.gameOver = false;
             Background.init();
-            //Hud.init();
-            //Asteroids.init();
+            Hud.init();
+            Invaders.init();
             Bullets.init();
             Ship.init();
         },
@@ -51,11 +51,16 @@
                 ctx.clearRect(0, 0, this.width, this.height);
 
                 Background.draw();
-                //Hud.draw();
-                //Asteroids.draw();
+                Hud.draw();
+                Invaders.draw();
                 Ship.draw();
                 Bullets.draw();
             }
+        },
+
+        restartGame: function() {
+            Game.canvas.removeEventListener('click', Game.restartGame, false);
+            Game.init();
         },
 
         runGame : function() {
@@ -70,6 +75,22 @@
             this.text = 'SPACE INVADERS';
             this.textSub = 'Click to Start';
             this.textColor = 'white';
+
+            this.create();
+        },
+
+        gamewin : function() {
+            this.text = 'YOU WIN (Score: ' + Hud.score + ')';
+            this.textSub = 'Click to Play Again';
+            this.textColor = 'green';
+
+            this.create();
+        },
+
+        gamelose : function() {
+            this.text = 'YOU LOSE';
+            this.textSub = 'Click to Play Again';
+            this.textColor = 'red';
 
             this.create();
         },
@@ -191,11 +212,33 @@
                         this.ents[i] = null;
                         this.current--;
                     }
+
+                    if(Invaders.current == 0) {
+                        Game.gameOver = true;
+                        Screen.gamewin();
+                        Game.canvas.addEventListener('click', Game.restartGame, false);
+                    }
                 }
             }
         },
 
         collide : function(index) {
+            var B = this.ents[index];
+            var i;
+            for(i = 0; i < Invaders.count; i++) {
+                var A = Invaders.ents[i];
+                if( A &&
+                    Math.sqrt(  (B.x - A.x) * (B.x - A.x) +
+                                (B.y - A.y) * (B.y - A.y)) < 13) { //hitting asteroid
+                    this.ents[index] = null;
+                    this.current--;
+                    Invaders.ents[i] = null;
+                    Invaders.current--;
+                    Hud.score++;
+
+                    break;
+                }
+            }
         },
 
         addBullet : function() {
@@ -222,6 +265,83 @@
             }
         }
 
+    };
+
+    var Invaders = {
+        count : 30,
+
+        getRandomInt : function(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        },
+
+        init : function() {
+            this.current = this.count;
+            this.ents = [this.count];
+            var i;
+            for(i = 0; i < this.count; i++) {
+                var X = this.getRandomInt(1, 12);
+
+                var XIndex = 120 + X * 30;
+                var YIndex = -(i * 30);
+
+                this.addInvader(i, XIndex, YIndex, 2);
+            }
+        },
+
+        draw : function() {
+            if(Game.gameOver) return;
+            var i;
+            for(i = 0; i < this.count; i++) {
+                var A = this.ents[i];
+
+                if(A) {
+
+                    A.y += 1;
+                
+                    ctx.beginPath();
+                    ctx.moveTo(A.x, A.y + 15);
+                    ctx.lineTo(A.x - 10, A.y - 10);
+                    ctx.lineTo(A.x + 10, A.y - 10);
+                    ctx.closePath();
+                    ctx.fillStyle = '#eee';
+                    ctx.fill();
+
+                    if(A.y > Game.height - 30) {
+                        Game.gameOver = true;
+                        Screen.gamelose();
+                        Game.canvas.addEventListener('click', Game.restartGame, false);
+                        return;
+                    }
+                }
+            }
+        },
+
+        addInvader : function(i, xIn, yIn, lifeIn) {
+            var open = i;
+            
+            this.ents[open] = {
+                x : xIn,
+                y : yIn,
+                life: lifeIn
+            };
+        }
+    };
+
+    var Hud = {
+        init: function() {
+            this.lv = 0;
+            this.score = 0;
+        },
+
+        draw: function() {
+            if(Game.gameOver) return;
+            ctx.font = '12px helvetica, arial';
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'left';
+            ctx.fillText('Score: ' + this.score, 5, Game.height - 5);
+            ctx.textAlign = 'right';
+            ctx.fillText('Level: ' + this.lv, Game.width - 5, Game.height - 5);
+        }
     };
 
     var Ctrl = {

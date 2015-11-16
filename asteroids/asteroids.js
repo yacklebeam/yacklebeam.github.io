@@ -81,7 +81,7 @@
 		},
 
 		gamewin: function() {
-            this.text = 'You Win (Score: ' + Hud.score + ')';
+            this.text = 'YOU WIN (Score: ' + Hud.score + ')';
             this.textSub = 'Click To Play Again';
             this.textColor = 'green';
 
@@ -89,7 +89,7 @@
         },
 
         gamelose: function() {
-            this.text = 'You Lose';
+            this.text = 'YOU LOSE';
             this.textSub = 'Click To Play Again';
             this.textColor = 'red';
 
