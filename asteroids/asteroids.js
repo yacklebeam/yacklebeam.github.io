@@ -17,7 +17,7 @@
     var ctx = null;
 
 	var Game = {
-		canvas: document.getElementById('canvas'),
+		canvas: document.getElementById('asteroids'),
 
 		setup: function() {
 			if(this.canvas.getContext) {
