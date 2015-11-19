@@ -3,12 +3,105 @@
 <html>
 <head>
     <title>Yacklebeam Lives Here</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
 </head>
 
-<body style="text-align:center; background-color:#FFFFFF">
-    <p><a href="/asteroids/index.html">ASTEROIDS</a></p>
-    <p><a href="/invaders/index.html">INVADERS</a></p>
+<body>
+	<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">THE HOMEPAGE OF JACOB TROXEL</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#about">ABOUT</a></li>
+            <li><a href="#projects">PROJECTS</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+		<div class="jumbotron">
+			<div class="row item active">
+				<!-- ITEMS FOR CAROUSEL -->
+		        <div class="col-md-4 hidden-sm hidden-xs">
+		        	<div class="circular-sprite-jumbo"></div>
+		        </div>
+		        <div class="col-md-8">
+					<h3>Want to check out my latest project?</h3>
+		        	<p>I'm currently sprucing up my skills with Javascript and HTML5 by building simple "canvas" games!  Check out old classics like Asteroids and Space Invaders, by clicking PLAY GAMES below.  If you are interested in the source code, all of it is available on Github!  These games are still being updated, so check back often to see new ones.</p>
+		        	<a href="/js-games/index.html" class="btn btn-primary btn-md">PLAY GAMES</a>
+		        	<a target="_blank" href="https://github.com/yacklebeam/js-html5-games" class="btn btn-success btn-md">GITHUB</a>
+		    	</div>
+		    </div>
+
+				
+		    <!--<hr>
+		    <div class="row">
+		    	<div class="col-md-3 col-sm-3">
+		    		<center>
+						<a target="_blank" href="https://github.com/yacklebeam/js-html5-games" class="btn btn-primary btn-lg">TWITTER</a>
+		    		</center>
+		    	</div>
+		    	<div class="col-md-3 col-sm-3">
+		    		<center>
+						<a target="_blank" href="https://github.com/yacklebeam/js-html5-games" class="btn btn-primary btn-lg">LINKEDIN</a>
+		    		</center>
+		    	</div>
+		    	<div class="col-md-3 col-sm-3">
+		    		<center>
+						<a target="_blank" href="https://github.com/yacklebeam/js-html5-games" class="btn btn-primary btn-lg">TWITCH</a>
+		    		</center>
+		    	</div>
+		    	<div class="col-md-3 col-sm-3">
+		    		<center>
+						<a target="_blank" href="https://github.com/yacklebeam/js-html5-games" class="btn btn-primary btn-lg">GITHUB</a>
+		    		</center>
+		    	</div>		    	
+		    </div>-->
+		</div>
+
+        <div class="row">
+            <h3 id="about">ABOUT ME</h3><hr>
+            <div class="col-md-9">
+            	<p>I'm Jacob "Yacklebeam" Troxel, a developer, gamer, and Twitch streamer from Spokane, WA.  More info to come in time...</p>
+        	</div>
+        	<div class="col-md-3 hidden-sm hidden-xs">
+	        	<div class="circular-face-small"></div>
+	        </div>
+        </div>
+	    <div class="row">
+            <hr><h3 id="projects">PROJECTS</h3><hr>
+            <div class="col-md-12">
+            	<div>
+            		<p>Whoops, no projects here yet.  In the meantime, check out my github profile down below.</p>
+            		<!--<h6>tags will go here for each project</h6>-->
+            		<a target="_blank" href="https://github.com/yacklebeam?tab=repositories" class="btn btn-success btn-xs">GITHUB</a>
+            	</div>
+            </div>
+		</div>
+	    <div class="row">
+            <hr><h3 id="contact">CONTACT ME</h3><hr>
+            <div class="col-md-12">
+                <p>If you are interested in contacting me for any reason, don't hesitate!  I can be reached at jacobmtroxel@gmail.com</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 
 </html>
