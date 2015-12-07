@@ -29,14 +29,15 @@
             }
         },
 
-        init: function() {
+        init: function() {//move this to a scene
             Ctrl.init();
             SceneHandler.init();
             Screen.init();
 
             InvaderPool.init();
             BulletPool.init();
-            Level.init();
+            LootPool.init();
+            //Level.init();
             Hud.init();
             Gun.init();
             Ship.init();
@@ -62,98 +63,82 @@
 
     var Screen = {
         init: function() {
-            SceneHandler.createScene( 
-                {   
-                    name: "START-SCREEN",
-                    init: function(){},
-                    draw: function() {
-                        if(Ctrl.enter && Ctrl.enterReset) {
-                            SceneHandler.setCurrentScene('INTRO-SCRIPT');
-                            Ctrl.enterReset = false;
-                        }
-                        TextRenderer.renderText("@L@WSTAR CADET", 180, 290, -1);
-                        TextRenderer.renderText("@L@CSTAR CADET", 181, 291, -1);
-                        TextRenderer.renderText("@M@Wpress any key to start", 150, Game.height - 25, -1);
+            SceneHandler.createScene({   
+                name: "START-SCREEN",
+                init: function(){},
+                draw: function() {
+                    if(Ctrl.enter && Ctrl.enterReset) {
+                        SceneHandler.setCurrentScene('CONTROL-GUIDE');
+                        Ctrl.enterReset = false;
                     }
+                    TextRenderer.renderText("@L@WSTAR CADET", 175, 290, -1);
+                    TextRenderer.renderText("@L@YSTAR CADET@S@RBETA", 176, 291, -1);
+                    TextRenderer.renderText("@M@Wpress \"shift\" to start", 170, Game.height - 25, -1);
                 }
-            );
+            });
 
-            SceneHandler.createScene( 
-                {   
-                    name: "INTRO-SCRIPT",
-                    init: function() {
-                        this.script = [ "@M@CWELCOME, PILOT",
-                                        "@M@Cyou have been chosen for a very special mission...",
-                                        "@M@Cthe @RRektarin @Cfleet approaches Earth.@N@NYou have been chosen to stop them.@N@Nthis should be an easy task..."];
-                        this.current = 0;
-                    },
-                    draw: function() {
-                        if(Ctrl.enter && Ctrl.enterReset) {
-                            if(this.current < this.script.length - 1) this.current++;
-                            else SceneHandler.setCurrentScene("GAME-LEVEL-1");
-                            Ctrl.enterReset = false;
-                        }
-                        TextRenderer.renderText(this.script[this.current], 210, 290, 200);
-                        TextRenderer.renderText("@M@Wpress \"shift\" to continue", 150, Game.height - 25, -1);
-                    }
-                }
-            );
-
-            SceneHandler.createScene( 
-                {
-                    name: "GAME-LEVEL-1",
-                    draw: function() {
-                        InvaderPool.draw();
-                        Ship.draw();
-                        BulletPool.draw();
-                        //Hud.draw();
-                    }
-                }
-            );
-
-            SceneHandler.createScene( 
-                {
-                    name: "GAME-OVER-WIN",
-                    draw: function() {
-                        if(Ctrl.enter && Ctrl.enterReset) {
-                            SceneHandler.setCurrentScene("START-SCREEN");
-                            Ctrl.enterReset = false;
-                        }
-                        TextRenderer.renderText("@L@GGAME OVER@N@N@M [FINAL SCORE:"+Hud.score+"]", 190, 290, -1);
-                        TextRenderer.renderText("@M@Wpress \"shift\" to restart", 150, Game.height - 25, -1);
-                    }
-                }
-            );
-
-            /*SceneHandler.createScene(
-            {
-                name: "TEST-LEVEL",
+            SceneHandler.createScene({   
+                name: "INTRO-SCRIPT",
                 init: function() {
-                    this.count = 0;
+                    this.script = [ "@M@CWELCOME, PILOT",
+                                    "@M@Cyou have been chosen for a very special mission...",
+                                    "@M@Cthe @RRektarin @Cfleet approaches Earth.@N@NYou have been chosen to stop them.@N@Nthis should be an easy task..."];
+                    this.current = 0;
                 },
                 draw: function() {
-                    if(Ctrl.left && Ctrl.leftReset) {
-                        Ship.health--;
-                        Ctrl.leftReset = false;
+                    if(Ctrl.enter && Ctrl.enterReset) {
+                        if(this.current < this.script.length - 1) this.current++;
+                        else SceneHandler.setCurrentScene("GAME-LEVEL-1");
+                        Ctrl.enterReset = false;
                     }
-                    if(Ctrl.right && Ctrl.rightReset) {
-                        Ship.health++;
-                        Ctrl.rightReset = false;
-                    }
-
-                    ctx.drawImage(AssetLoader.effects, this.count, 0, 50, 50, 275, 275, 50, 50);
-                    if(Game.FrameCount % 4 == 0) {
-                        this.count += 50;
-                        if(this.count == 300) this.count = 0;
-                    }
-                    ctx.drawImage(AssetLoader.uiSegments, 40, 0, 200, 200, 10, 440, 200, 200);
-                    ctx.drawImage(AssetLoader.uiSegments, 0, 160, 300, 140, 200, 450, 300, 140);
-                    TextRenderer.renderText("@S@WPILOT! Look out!  More ships are approaching from Mars!@N@NDon't let them get to Earth!", 226, 456, 280);
-
-                    //Hud.draw();
+                    TextRenderer.renderText(this.script[this.current], 210, 250, 250);
+                    TextRenderer.renderText("@M@Wpress \"shift\" to continue", 170, Game.height - 25, -1);
                 }
-            }
-            );*/
+            });
+
+            SceneHandler.createScene({
+                name: 'CONTROL-GUIDE',
+                init: function() {},
+                draw: function() {
+                    if(Ctrl.enter && Ctrl.enterReset) {
+                        SceneHandler.setCurrentScene('INTRO-SCRIPT');
+                        Ctrl.enterReset = false;
+                    }
+                    TextRenderer.renderText("@L@GCONTROLS",220,200,-1);
+                    TextRenderer.renderText("@M@W\"A\",\"D\" to move@N@NHold \"SHIFT\" to fire@N@N\"/\" to launch bomb", 200, 280, -1);
+                    TextRenderer.renderText("@M@Wpress \"shift\" to begin", 170, Game.height - 25, -1);                    
+                }
+            });
+
+            SceneHandler.createScene({
+                name: "GAME-LEVEL-1",
+                init: function() {
+                    InvaderPool.clear();
+                    Level.init();
+                },
+                draw: function() {
+                    InvaderPool.draw();
+                    Ship.draw();
+                    BulletPool.draw();
+                    LootPool.draw();
+                    Hud.draw();
+                }
+            });
+
+            SceneHandler.createScene({
+                name: "GAME-OVER-WIN",
+                init: function() {
+                    Ctrl.enterReset = false;
+                },
+                draw: function() {
+                    if(Ctrl.enter && Ctrl.enterReset) {
+                        SceneHandler.setCurrentScene("START-SCREEN");
+                        Ctrl.enterReset = false;
+                    }
+                    TextRenderer.renderText("@L@GGAME OVER@N@N@M [FINAL SCORE:"+Hud.score+"]", 190, 290, -1);
+                    TextRenderer.renderText("@M@Wpress \"shift\" to restart", 170, Game.height - 25, -1);
+                }
+            });
 
             SceneHandler.setCurrentScene("START-SCREEN");
         },
@@ -186,9 +171,9 @@
             this.hudLeft = new Image();
             this.hudLeft.src = 'res/hud_left.png';
             this.hudRight = new Image();
-            this.hudRight.src = 'res/hud_right.png';
+            this.hudRight.src = 'res/hud_right.png';*/
             this.uiSegments = new Image();
-            this.uiSegments.src = 'res/ui-segments.png';*/
+            this.uiSegments.src = 'res/ui-segments.png';
             this.effects = new Image();
             this.effects.src = 'res/effects.png';
             this.ships = new Image();
@@ -316,18 +301,26 @@
         loadLevel: function(level) {
             switch(level) {
                 case 0:
-                    Hud.goal = 50;
+                    Hud.goal = 20;
                     for(var i = 0; i < Hud.goal; i++) {
                         var random = 10 * getRandomIntInclusive(0,2);
                         var newInvader = {
-                            life: 1,
+                            life: 5,
                             x: 200 + (i%5) * 54 + (i/5)%2 * 27,
                             y: 0 - 45 * Math.floor(i / 5),
                             dead: false,
                             type: "ship",
                             fcount : random,
                             count : 0,
-                            radius: 8
+                            radius: 8,
+                            currentPath: 0,
+                            distTraveled: 0,
+                            loot: 5,
+                            path: [ {xs:-1, ys: 2, d: 100, next: 1},//move this OUT of each guy
+                                    {xs:0, ys: 1, d: 100, next: 2},
+                                    {xs:1, ys: 0, d: 100, next: 3},
+                                    {xs:0, ys: -1, d: 100, next: 4},
+                                    {xs:-1, ys: 0, d: 100, next: 1}]
                         };
                         InvaderPool.addNew(newInvader);
                     }
@@ -378,7 +371,7 @@
                 case 1:
                     this.dmg = 1;
                     this.r = 5;
-                    this.bulletCount = 3;
+                    this.bulletCount = 1;
                     this.bulletSpread = 1;
                     this.fireRate = 5;
                     this.color = 'red';
@@ -404,7 +397,8 @@
                         ys: -15,
                         r: this.r,
                         dmg: this.dmg,
-                        color: this.color
+                        color: this.color,
+                        life: 1
                     };
                     BulletPool.addNew(newBullet);
                 }
@@ -437,19 +431,29 @@
         init: function() {
             this.resetTimer = Gun.fireRate;
             this.x = 290;
-            this.y = 565;
+            this.y = 550;
             this.speed = 8;
             this.health = 4;
             this.shields = 4;
             this.fcount = 0;
+            this.cooldownTimer = 0;
+            this.cooldown = true;
         },
 
         draw: function() {
             if(Game.gameOver) return;
+            //if(Game.FrameCount % 60 == 0) 
+            this.cooldownTimer--;
+            if(this.cooldownTimer <= 0) {
+                this.cooldownTimer = 0;
+                this.cooldown = true;
+            }
+            else this.cooldown = false;
+
             this.move();
 
             ctx.drawImage(AssetLoader.ships, 0, 75, 25, 25, this.x - 12, this.y - 12, 25, 25);
-            ctx.drawImage(AssetLoader.effects, this.fcount, 65, 10, 15, this.x-5, this.y + 12, 10, 15);
+            ctx.drawImage(AssetLoader.effects, this.fcount, 65, 9, 15, this.x-5, this.y + 12, 9, 15);
             if(Game.FrameCount %10 == 0) {
                 this.fcount += 10;
                 if(this.fcount == 30) this.fcount = 0;
@@ -463,8 +467,8 @@
                 this.x += this.speed;
             }
 
-            if(this.x > 700) this.x = 500;
-            if(this.x < 100) this.x = 100;
+            if(this.x > 480) this.x = 480;
+            if(this.x < 120) this.x = 120;            
 
             if(Ctrl.enter) {
                 if(this.resetTimer == 0) {
@@ -473,6 +477,28 @@
                 }
                 this.resetTimer--;
             }
+
+            if(Ctrl.item && Ctrl.itemReset && this.cooldown) {
+                Ctrl.itemReset = false;
+                this.cooldownTimer = 300;
+                this.launchBomb();
+            }
+        },
+
+        launchBomb: function() {
+            var bomb = {
+                faction: 0,
+                x: Ship.x,
+                y: Ship.y - 15,
+                xs: 0,
+                ys: -10,
+                r: 10,
+                dmg: 0,
+                type: "bomb",
+                life: 30,
+                blink: false
+            };
+            BulletPool.addNew(bomb);
         },
 
         shoot: function() {
@@ -519,21 +545,17 @@
                     bullet.x += bullet.xs;
                     bullet.y += bullet.ys;
             
-                    /*ctx.beginPath();
-                    ctx.arc(bullet.x, bullet.y, bullet.r, 0, 2 * Math.PI);
-                    ctx.closePath();
+                    if(bullet.type == 'bomb') {
+                        if(Game.FrameCount %10 == 0) {
+                            bullet.blink = !bullet.blink;
+                        }
+                        if(!bullet.blink) ctx.drawImage(AssetLoader.effects, 60,50,20,20,bullet.x-10, bullet.y-10, 20, 20);
+                        else ctx.drawImage(AssetLoader.effects, 40,50,20,20,bullet.x-10, bullet.y-10, 20, 20);
 
-                    ctx.fillStyle = bullet.color;
-                    ctx.fill();
-
-                    ctx.beginPath();
-                    ctx.arc(bullet.x, bullet.y, bullet.r - 4, 0, 2 * Math.PI);
-                    ctx.closePath();
-
-                    ctx.fillStyle = 'white';
-                    ctx.fill();*/
-
-                    ctx.drawImage(AssetLoader.effects, 30,50,10,10,bullet.x-5, bullet.y-5, 10, 10);
+                        //this.objects[i].life--;
+                    } else {
+                        ctx.drawImage(AssetLoader.effects, 30,50,10,10,bullet.x-5, bullet.y-5, 10, 10);
+                    }
 
                     if(bullet.y < -5) {
                         this.removeIndex(bullet.index);
@@ -580,8 +602,25 @@
                         var Invader = InvaderPool.objects[j];
                         //if(Invader.type =='explosion') continue;
                         if((Bullet.faction == 0) && Invader && !Invader.dead && Invader.type != 'explosion') {
-                            if(Math.sqrt((Invader.x - Bullet.x) * (Invader.x - Bullet.x) + (Invader.y - Bullet.y) * (Invader.y - Bullet.y)) < (Bullet.r + Invader.radius)) {
+                            if(Math.sqrt((Invader.x - Bullet.x) * (Invader.x - Bullet.x) + (Invader.y - Bullet.y) * (Invader.y - Bullet.y)) < (Bullet.r + Invader.radius) || Bullet.life <= 0) {
                                 this.removeIndex(Bullet.index);
+                                if(Bullet.type == 'bomb') {
+                                    var XDir = [15,0,-15,0,12,-12,12,-12];
+                                    var YDir = [0,15,0,-15,12,-12,-12,12];
+                                    for(var i = 0; i < 8; i++) {
+                                        var bullet = {
+                                            faction: 0,
+                                            x: Bullet.x,
+                                            y: Bullet.y,
+                                            xs: XDir[i],
+                                            ys: YDir[i],
+                                            r: 10,
+                                            dmg: 3,
+                                            life: 1
+                                        };
+                                        this.addNew(bullet);
+                                    }
+                                }
                                 InvaderPool.objects[j].life -= Bullet.dmg;
                                 InvaderPool.addNew({
                                     life: 0,
@@ -645,6 +684,10 @@
             this.count = 0; //MOVE THIS
         },
 
+        clear: function() {
+            this.init();
+        },
+
         draw: function() {
             //Hud.level = this.end;
             if(Game.gameOver) return;
@@ -654,9 +697,17 @@
                 if(A) {
                     //Move this code into object, rather than pool
                     if(A.type == "ship") {
-                        A.y += 1;
+                        //A.y += 1;
+                        A.x += A.path[A.currentPath].xs;
+                        A.y += A.path[A.currentPath].ys;
+                        A.distTraveled++;
+                        if(A.distTraveled == A.path[A.currentPath].d) {
+                            A.currentPath = A.path[A.currentPath].next;
+                            A.distTraveled = 0;
+                        }
+
                         ctx.drawImage(AssetLoader.ships, 0, 0, 25, 25, A.x-12, A.y-12, 25, 25);
-                        ctx.drawImage(AssetLoader.effects, A.fcount, 50, 10, 15, A.x-5, A.y-27, 10, 15);
+                        ctx.drawImage(AssetLoader.effects, A.fcount, 50, 9, 15, A.x-5, A.y-27, 9, 15);
                         if(Game.FrameCount %10 == 0) {
                             A.fcount += 10;
                             if(A.fcount == 30) A.fcount = 0;
@@ -689,6 +740,52 @@
                         this.removeIndex(A.index);
                     }
                 }
+            }
+        },
+
+        addNew: function(ob) {
+            if(this.open == this.end) {
+                ob.index = this.open;
+                this.objects.push(ob);
+                this.end++;
+                this.open++;
+            } else {
+                ob.index = this.open;
+                this.objects[this.open] = ob;
+                this.open = this.getOpenIndex();
+            }
+        },
+
+        removeIndex: function(index) {
+            this.objects[index] = null;
+            if(index < this.open) this.open = index;
+        },
+
+        getOpenIndex: function() {
+            for(var i = 0; i < this.end; i++) {
+                if(this.objects[i] == null) return i;
+            }
+            return this.end;
+        }
+    };
+
+    var LootPool = {
+        init: function() {
+            this.maxSize = 100;
+            this.count = 0;
+            this.objects = [];
+            this.open = 0;
+            this.end = 0;
+        },
+
+        clear: function() {
+            this.init();
+        },
+
+        draw: function() {
+            if(Game.gameOver) return;
+            for(var i = 0; i < this.end; i++) {
+                
             }
         },
 
@@ -765,37 +862,19 @@
         },
 
         draw: function() {
-            if(Game.gameOver) return;
-            //ctx.drawImage(AssetLoader.hudLeft, 0, 0);
-            //ctx.drawImage(AssetLoader.hudRight, Game.width - 100, 0);
-
-            /*ctx.font = '12px helvetica, arial';
-            ctx.fillStyle = '#befbff';
-            ctx.textAlign = 'left';
-            ctx.fillText('Score: ' + this.score, 12, Game.height - 60);
-            ctx.textAlign = 'left';
-            ctx.fillText('Level: ' + this.level, 12, Game.height - 75);*/
+            if(!Ship.cooldown) {
+                TextRenderer.renderText("@M@W" + ((Ship.cooldownTimer / 60).toFixed(1)), 10, 480, -1);
+                ctx.drawImage(AssetLoader.effects, 40,50,20,20, 15, 500, 20, 20);
+            } else {
+                ctx.drawImage(AssetLoader.effects, 60,50,20,20, 15, 500, 20, 20);
+            }           
             for(var i = 0; i < Ship.health; i++) {
-                //var LostHealth = 4 - Ship.health;
-                //if(i < LostHealth) {
-                //    ctx.drawImage(AssetLoader.hSegEmpty, 14, 10 + i * 80);
-                //} else {
-                    ctx.drawImage(AssetLoader.uiSegments, 0, 0, 20, 50, 10, 10 + i * 55, 20, 50);
-                //}
+                ctx.drawImage(AssetLoader.uiSegments, 0, 0, 20, 50, 10, 10 + i * 55, 20, 50);
             }
 
             for(var i = 0; i < Ship.shields; i++) {
                 ctx.drawImage(AssetLoader.uiSegments, 20, 0, 20, 50, 35, 10 + i * 55, 20, 50);
             }
-
-            /*for(var i = 0; i < 8; i++) {
-                var LostShields = 8 - Ship.shields;
-                if(i < LostShields) {
-                    ctx.drawImage(AssetLoader.sSegEmpty, 36, 77 + i * 30);
-                } else {
-                    ctx.drawImage(AssetLoader.sSeg, 36, 77 + i * 30);
-                }
-            }*/
         }
     };
 
@@ -804,6 +883,7 @@
             Ctrl.leftReset = true;
             Ctrl.rightReset = true;
             Ctrl.enterReset = true;
+            Ctrl.itemReset = true;
             window.addEventListener('keydown', this.keyDown, true);
             window.addEventListener('keyup', this.keyUp, true);
         },
@@ -816,9 +896,18 @@
                     break;
                 case 68: //D
                     Ctrl.right = true;
+                    break;                
+                case 87: //W
+                    Ctrl.up = true;
+                    break;
+                case 83: //S
+                    Ctrl.down = true;
                     break;
                 case 16://shift
                     Ctrl.enter = true;
+                    break;
+                case 191://slash
+                    Ctrl.item = true;
                     break;
                 default:
                     break;
@@ -836,9 +925,19 @@
                     Ctrl.right = false;
                     Ctrl.rightReset = true;
                     break;
+                case 87: //W
+                    Ctrl.up = false;
+                    break;
+                case 83: //S
+                    Ctrl.down = false;
+                    break;    
                 case 16:
                     Ctrl.enter = false;
                     Ctrl.enterReset = true;
+                    break;
+                case 191:
+                    Ctrl.item = false;
+                    Ctrl.itemReset = true;
                     break;
                 default:
                     break;
