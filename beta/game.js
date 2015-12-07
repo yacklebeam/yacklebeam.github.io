@@ -362,14 +362,14 @@
 
     var Gun = {
         init: function() {
-            this.setGun(0);
+            this.setGun(1);
         },
 
         setGun: function(id) {
             switch(id) {
                 case 0:
                     this.dmg = 1;
-                    this.r = 10;
+                    this.r = 5;
                     this.bulletCount = 2;
                     this.bulletSpread = 1;
                     this.fireRate = 5;
@@ -377,7 +377,7 @@
                     break;
                 case 1:
                     this.dmg = 1;
-                    this.r = 10;
+                    this.r = 5;
                     this.bulletCount = 3;
                     this.bulletSpread = 1;
                     this.fireRate = 5;
@@ -437,29 +437,23 @@
         init: function() {
             this.resetTimer = Gun.fireRate;
             this.x = 290;
-            this.y = 575;
+            this.y = 565;
             this.speed = 8;
             this.health = 4;
             this.shields = 4;
+            this.fcount = 0;
         },
 
         draw: function() {
             if(Game.gameOver) return;
             this.move();
 
-            ctx.beginPath();
-            ctx.moveTo(this.x + this.point1.x, this.y + this.point1.y);
-            ctx.lineTo(this.x + this.point2.x, this.y + this.point2.y);
-            ctx.lineTo(this.x + this.point3.x, this.y + this.point3.y);
-            ctx.closePath();
-            ctx.fillStyle = '#eee';
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(this.x + this.point4.x,this.y + this.point4.y, 3, 0, 2 * Math.PI);
-            ctx.closePath();
-            ctx.fillStyle = 'orange';
-            ctx.fill();
+            ctx.drawImage(AssetLoader.ships, 0, 75, 25, 25, this.x - 12, this.y - 12, 25, 25);
+            ctx.drawImage(AssetLoader.effects, this.fcount, 65, 10, 15, this.x-5, this.y + 12, 10, 15);
+            if(Game.FrameCount %10 == 0) {
+                this.fcount += 10;
+                if(this.fcount == 30) this.fcount = 0;
+            }
         },
 
         move: function() {
@@ -525,7 +519,7 @@
                     bullet.x += bullet.xs;
                     bullet.y += bullet.ys;
             
-                    ctx.beginPath();
+                    /*ctx.beginPath();
                     ctx.arc(bullet.x, bullet.y, bullet.r, 0, 2 * Math.PI);
                     ctx.closePath();
 
@@ -537,7 +531,9 @@
                     ctx.closePath();
 
                     ctx.fillStyle = 'white';
-                    ctx.fill();
+                    ctx.fill();*/
+
+                    ctx.drawImage(AssetLoader.effects, 30,50,10,10,bullet.x-5, bullet.y-5, 10, 10);
 
                     if(bullet.y < -5) {
                         this.removeIndex(bullet.index);
