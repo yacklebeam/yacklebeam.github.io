@@ -135,7 +135,7 @@
                         SceneHandler.setCurrentScene("START-SCREEN");
                         Ctrl.enterReset = false;
                     }
-                    TextRenderer.renderText("@L@GGAME OVER@N@N@M [FINAL SCORE:"+Hud.score+"]", 190, 290, -1);
+                    TextRenderer.renderText("@L@GGAME OVER@N@N@M  FINAL SCORE:"+Hud.score, 200, 290, -1);
                     TextRenderer.renderText("@M@Wpress \"shift\" to restart", 170, Game.height - 25, -1);
                 }
             });
@@ -316,6 +316,7 @@
                             currentPath: 0,
                             distTraveled: 0,
                             loot: 5,
+                            shoot: false,
                             path: [ {xs:-1, ys: 2, d: 100, next: 1},//move this OUT of each guy
                                     {xs:0, ys: 1, d: 100, next: 2},
                                     {xs:1, ys: 0, d: 100, next: 3},
@@ -554,7 +555,8 @@
 
                         //this.objects[i].life--;
                     } else {
-                        ctx.drawImage(AssetLoader.effects, 30,50,10,10,bullet.x-5, bullet.y-5, 10, 10);
+                        if(bullet.faction == 0) ctx.drawImage(AssetLoader.effects, 30,50,10,10,bullet.x-5, bullet.y-5, 10, 10);
+                        else ctx.drawImage(AssetLoader.effects, 30,60,10,10,bullet.x-5, bullet.y-5, 10, 10);
                     }
 
                     if(bullet.y < -5) {
@@ -589,10 +591,23 @@
                 var Bullet = this.objects[i];
                 if(Bullet) {
                     //Check '1' bullets for ship collisions
+                    if(Bullet.y > Game.height || Bullet.x < 0) {
+                        this.removeIndex(Bullet.index);
+                        continue;
+                    }
+
                     if(Bullet.faction == 1) {
                         if(Math.sqrt((Ship.x - Bullet.x) * (Ship.x - Bullet.x) + (Ship.y - Bullet.y) * (Ship.y - Bullet.y)) < 15) {
                             Ship.hit(Bullet.dmg);
                             this.removeIndex(Bullet.index);
+                            InvaderPool.addNew({
+                                life: 0,
+                                x: Bullet.x,
+                                y: Bullet.y,
+                                dead: false,
+                                type: "explosion",
+                                count : 0
+                            });
                             break;
                         }
                     } 
@@ -631,28 +646,11 @@
                                     count : 0
                                 });
                                 if(InvaderPool.objects[j].life <= 0) {
-                                    /*InvaderPool.addNew({
-                                        life: 0,
-                                        x: Invader.x,
-                                        y: Invader.y,
-                                        dead: false,
-                                        type: "explosion",
-                                        count : 0
-                                    });*/
                                     InvaderPool.removeIndex(Invader.index);
-                                    //InvaderPool.objects[j].type = "explosion";
-                                    //InvaderPool.objects[j].dead = true;
                                     Hud.goal--;
                                     Hud.score++;
                                 }
-                                /*if(InvaderPool.objects[j].life == 0) {
-                                    InvaderPool.objects[j].dead = true;
-                                }*/
                                 if(Hud.goal == 0) {
-                                    //Game.gameOver = true;
-                                    //Screen.gamewin();
-                                    //Game.canvas.addEventListener('click', Game.restartGame, false);
-                                    //Level.loadLevel(1);
                                     SceneHandler.setCurrentScene('GAME-OVER-WIN');
                                     return;
                                 }
@@ -674,14 +672,11 @@
 
     var InvaderPool = {
         init: function() {
-            this.bossReset = 20; //MOVE THIS
             this.maxSize = 100;
-            this.count = 0;
             this.objects = [];
             this.open = 0;
             this.end = 0;
-            this.left = true;//MOVE THIS
-            this.count = 0; //MOVE THIS
+            this.count = 0;
         },
 
         clear: function() {
@@ -689,7 +684,6 @@
         },
 
         draw: function() {
-            //Hud.level = this.end;
             if(Game.gameOver) return;
             for(var i = 0; i < this.end; i++) {
                 var A = this.objects[i];
@@ -704,6 +698,7 @@
                         if(A.distTraveled == A.path[A.currentPath].d) {
                             A.currentPath = A.path[A.currentPath].next;
                             A.distTraveled = 0;
+                            //if(A.path[A.currentPath].shoot) A.shoot = true;
                         }
 
                         ctx.drawImage(AssetLoader.ships, 0, 0, 25, 25, A.x-12, A.y-12, 25, 25);
@@ -712,6 +707,19 @@
                             A.fcount += 10;
                             if(A.fcount == 30) A.fcount = 0;
                         }
+                        /*if(A.shoot) {
+                            BulletPool.addNew({
+                                faction: 1,
+                                x: A.x,
+                                y: A.y + 10,
+                                xs: 0,
+                                ys: 15,
+                                r: 10,
+                                dmg: 1,
+                                life: 1
+                            });
+                            A.shoot = false;
+                        }*/
                     } else if(A.type == 'explosion') {
                         ctx.drawImage(AssetLoader.effects, A.count, 0, 50, 50, A.x - 25, A.y - 25, 50, 50);
                         if(Game.FrameCount % 3 == 0) {
@@ -723,21 +731,6 @@
                         }
                     } else {
                         ctx.drawImage(AssetLoader.ships, 25, 0, 100, 100, A.x-50, A.y-50, 100, 100);
-                        /*ctx.drawImage(AssetLoader.effects, A.fcount, 50, 10, 15, A.x-5, A.y-65, 10, 15);
-                        if(Game.FrameCount %10 == 0) {
-                            A.fcount += 10;
-                            if(A.fcount == 30) A.fcount = 0;
-                        }*/
-                    }
-
-                    /*if(A.y > Game.height - 30) {
-                        Game.gameOver = true;
-                        Screen.gamelose();
-                        Game.canvas.addEventListener('click', Game.restartGame, false);
-                        return;
-                    }*/
-                    if(A.y == Game.height + 5) {
-                        this.removeIndex(A.index);
                     }
                 }
             }
@@ -817,48 +810,8 @@
 
     var Hud = {
         init: function() {
-            this.mainMenu = [
-            {
-                text: "GUN 1",
-                cmd: function() {
-                    Gun.setGun(0);
-                    Game.MenuOpen = false;
-                }
-            },
-            {
-                text: "GUN 2",
-                cmd: function() {
-                    Gun.setGun(1);
-                    Game.MenuOpen = false;
-                }
-            }];
             this.level = 0;
             this.score = 0;
-            this.menux = 200;
-            this.menuy = 200;
-            this.gunLevel = 0;
-            this.selected = 0;
-
-            //this.ready = false;
-
-            /*this.hSeg = new Image();
-            this.hSeg.src = 'heath_segment.png';
-            this.hSegEmpty = new Image();
-            this.hSegEmpty.src = "heath_segment_empty.png";
-            this.sSeg = new Image();
-            this.sSeg.src = "shield_segment.png";
-            this.sSegEmpty = new Image();
-            this.sSegEmpty.src = "shield_segment_empty.png";
-            this.hudLeft = new Image();
-            this.hudLeft.src = 'hud_left.png';
-            this.hudRight = new Image();
-            this.hudRight.src = 'hud_right.png';
-            this.uiSegments = new Image();
-            this.uiSegments.src = 'ui-segments.png';*/
-
-            /*this.hSeg.onload = function() {
-                this.ready = true;
-            }*/
         },
 
         draw: function() {
@@ -868,13 +821,13 @@
             } else {
                 ctx.drawImage(AssetLoader.effects, 60,50,20,20, 15, 500, 20, 20);
             }           
-            for(var i = 0; i < Ship.health; i++) {
+            /*for(var i = 0; i < Ship.health; i++) {
                 ctx.drawImage(AssetLoader.uiSegments, 0, 0, 20, 50, 10, 10 + i * 55, 20, 50);
             }
 
             for(var i = 0; i < Ship.shields; i++) {
                 ctx.drawImage(AssetLoader.uiSegments, 20, 0, 20, 50, 35, 10 + i * 55, 20, 50);
-            }
+            }*/
         }
     };
 
@@ -897,12 +850,6 @@
                 case 68: //D
                     Ctrl.right = true;
                     break;                
-                case 87: //W
-                    Ctrl.up = true;
-                    break;
-                case 83: //S
-                    Ctrl.down = true;
-                    break;
                 case 16://shift
                     Ctrl.enter = true;
                     break;
@@ -924,13 +871,7 @@
                 case 68: //D
                     Ctrl.right = false;
                     Ctrl.rightReset = true;
-                    break;
-                case 87: //W
-                    Ctrl.up = false;
-                    break;
-                case 83: //S
-                    Ctrl.down = false;
-                    break;    
+                    break;   
                 case 16:
                     Ctrl.enter = false;
                     Ctrl.enterReset = true;
