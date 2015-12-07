@@ -65,13 +65,14 @@
             SceneHandler.createScene( 
                 {   
                     name: "START-SCREEN",
+                    init: function(){},
                     draw: function() {
-                        if(Ctrl.anyKey) {
-                            SceneHandler.setCurrentScene('SCRIPT-1');
+                        if(Ctrl.enter && Ctrl.enterReset) {
+                            SceneHandler.setCurrentScene('INTRO-SCRIPT');
                             Ctrl.enterReset = false;
                         }
-                        TextRenderer.renderText("@L@RSTAR CADET", 180, 290, -1);
-                        TextRenderer.renderText("@L@YSTAR CADET", 181, 291, -1);
+                        TextRenderer.renderText("@L@WSTAR CADET", 180, 290, -1);
+                        TextRenderer.renderText("@L@CSTAR CADET", 181, 291, -1);
                         TextRenderer.renderText("@M@Wpress any key to start", 150, Game.height - 25, -1);
                     }
                 }
@@ -79,42 +80,21 @@
 
             SceneHandler.createScene( 
                 {   
-                    name: "SCRIPT-1",
+                    name: "INTRO-SCRIPT",
+                    init: function() {
+                        this.script = [ "@M@CWELCOME, PILOT",
+                                        "@M@Cyou have been chosen for a very special mission...",
+                                        "@M@Cthe @RRektarin @Cfleet approaches Earth.@N@NYou have been chosen to stop them.@N@Nthis should be an easy task..."];
+                        this.current = 0;
+                    },
                     draw: function() {
                         if(Ctrl.enter && Ctrl.enterReset) {
-                            SceneHandler.setCurrentScene('SCRIPT-2');
+                            if(this.current < this.script.length - 1) this.current++;
+                            else SceneHandler.setCurrentScene("GAME-LEVEL-1");
                             Ctrl.enterReset = false;
                         }
-                        TextRenderer.renderText("@M@CWELCOME, PILOT", 210, 290, 200);
+                        TextRenderer.renderText(this.script[this.current], 210, 290, 200);
                         TextRenderer.renderText("@M@Wpress \"shift\" to continue", 150, Game.height - 25, -1);
-                    }
-                }
-            );
-
-            SceneHandler.createScene( 
-                {
-                    name: "SCRIPT-2",
-                    draw: function() {
-                        if(Ctrl.enter && Ctrl.enterReset) {
-                            SceneHandler.setCurrentScene('SCRIPT-3');
-                            Ctrl.enterReset = false;
-                        }
-                        TextRenderer.renderText("@M@Cyou have been chosen for a very special mission...", 150, 290, 300);
-                        TextRenderer.renderText("@M@Wpress \"shift\" to continue", 150, Game.height - 25, -1);
-                    }
-                }
-            );
-
-            SceneHandler.createScene( 
-                {
-                    name: "SCRIPT-3",
-                    draw: function() {
-                        if(Ctrl.enter && Ctrl.enterReset) {
-                            SceneHandler.setCurrentScene('GAME-LEVEL-1');
-                            Ctrl.enterReset = false;
-                        }
-                        TextRenderer.renderText("@M@Cthe @RRektarin @Cfleet approaches Earth.@N@NYou have been chosen to stop them.@N@Nthis should be an easy task...", 150, 250, 300);
-                        TextRenderer.renderText("@M@Wpress \"shift\" to begin", 150, Game.height - 25, -1);
                     }
                 }
             );
@@ -126,7 +106,7 @@
                         InvaderPool.draw();
                         Ship.draw();
                         BulletPool.draw();
-                        Hud.draw();
+                        //Hud.draw();
                     }
                 }
             );
@@ -135,10 +115,45 @@
                 {
                     name: "GAME-OVER-WIN",
                     draw: function() {
+                        if(Ctrl.enter && Ctrl.enterReset) {
+                            SceneHandler.setCurrentScene("START-SCREEN");
+                            Ctrl.enterReset = false;
+                        }
                         TextRenderer.renderText("@L@GGAME OVER@N@N@M [FINAL SCORE:"+Hud.score+"]", 190, 290, -1);
+                        TextRenderer.renderText("@M@Wpress \"shift\" to restart", 150, Game.height - 25, -1);
                     }
                 }
             );
+
+            /*SceneHandler.createScene(
+            {
+                name: "TEST-LEVEL",
+                init: function() {
+                    this.count = 0;
+                },
+                draw: function() {
+                    if(Ctrl.left && Ctrl.leftReset) {
+                        Ship.health--;
+                        Ctrl.leftReset = false;
+                    }
+                    if(Ctrl.right && Ctrl.rightReset) {
+                        Ship.health++;
+                        Ctrl.rightReset = false;
+                    }
+
+                    ctx.drawImage(AssetLoader.effects, this.count, 0, 50, 50, 275, 275, 50, 50);
+                    if(Game.FrameCount % 4 == 0) {
+                        this.count += 50;
+                        if(this.count == 300) this.count = 0;
+                    }
+                    ctx.drawImage(AssetLoader.uiSegments, 40, 0, 200, 200, 10, 440, 200, 200);
+                    ctx.drawImage(AssetLoader.uiSegments, 0, 160, 300, 140, 200, 450, 300, 140);
+                    TextRenderer.renderText("@S@WPILOT! Look out!  More ships are approaching from Mars!@N@NDon't let them get to Earth!", 226, 456, 280);
+
+                    //Hud.draw();
+                }
+            }
+            );*/
 
             SceneHandler.setCurrentScene("START-SCREEN");
         },
@@ -161,7 +176,7 @@
             this.AlphabetLarge = new Image();
             this.AlphabetLarge.src = 'res/chars-large.png';
             this.hSeg = new Image();
-            this.hSeg.src = 'res/heath_segment.png';
+            /*this.hSeg.src = 'res/heath_segment.png';
             this.hSegEmpty = new Image();
             this.hSegEmpty.src = "res/heath_segment_empty.png";
             this.sSeg = new Image();
@@ -172,6 +187,12 @@
             this.hudLeft.src = 'res/hud_left.png';
             this.hudRight = new Image();
             this.hudRight.src = 'res/hud_right.png';
+            this.uiSegments = new Image();
+            this.uiSegments.src = 'res/ui-segments.png';*/
+            this.effects = new Image();
+            this.effects.src = 'res/effects.png';
+            this.ships = new Image();
+            this.ships.src = 'res/ships.png';
         }
     };
 
@@ -189,6 +210,7 @@
             for(var i = 0; i < this.sceneList.length; i++) {
                 if(this.sceneList[i].name == nameIn) {
                     this.currentScene = i;
+                    this.sceneList[i].init();
                     return;
                 }
             }
@@ -294,17 +316,45 @@
         loadLevel: function(level) {
             switch(level) {
                 case 0:
-                    Hud.goal = 20;
-                    for(var i = 0; i < 20; i++) {
+                    Hud.goal = 50;
+                    for(var i = 0; i < Hud.goal; i++) {
+                        var random = 10 * getRandomIntInclusive(0,2);
                         var newInvader = {
                             life: 1,
-                            x: 200 + (i%10) * 25,
-                            y: 0 - 25 * Math.floor(i / 10),
+                            x: 200 + (i%5) * 54 + (i/5)%2 * 27,
+                            y: 0 - 45 * Math.floor(i / 5),
                             dead: false,
-                            type: "ship"
+                            type: "ship",
+                            fcount : random,
+                            count : 0,
+                            radius: 8
                         };
                         InvaderPool.addNew(newInvader);
                     }
+
+                    /*var newInvader = {
+                        life: 1,
+                        x: 288,
+                        y: 20,
+                        dead: false,
+                        type: "ship"
+                    };
+                    InvaderPool.addNew(newInvader);*/
+                    break;
+                case 1:
+                    Hud.goal = 1;
+                    var random = 10 * getRandomIntInclusive(0,2);
+                    var newInvader = {
+                        life: 100,
+                        x: 300,
+                        y: 80,
+                        dead: false,
+                        type: "boss",
+                        fcount : random,
+                        count : 0,
+                        radius: 30
+                    };
+                    InvaderPool.addNew(newInvader);
                     break;
             }
         }
@@ -320,14 +370,14 @@
                 case 0:
                     this.dmg = 1;
                     this.r = 10;
-                    this.bulletCount = 1;
+                    this.bulletCount = 2;
                     this.bulletSpread = 1;
-                    this.fireRate = 10;
+                    this.fireRate = 5;
                     this.color = 'red';
                     break;
                 case 1:
-                    this.dmg = 2;
-                    this.r = 15;
+                    this.dmg = 1;
+                    this.r = 10;
                     this.bulletCount = 3;
                     this.bulletSpread = 1;
                     this.fireRate = 5;
@@ -390,7 +440,7 @@
             this.y = 575;
             this.speed = 8;
             this.health = 4;
-            this.shields = 8;
+            this.shields = 4;
         },
 
         draw: function() {
@@ -529,21 +579,41 @@
                         }
                     } 
 
-
                     //Check '0' bullets for invader collisions
                     for(var j = 0; j < InvaderPool.end; j++) {
                         var Invader = InvaderPool.objects[j];
-                        if((Bullet.faction == 0) && Invader && !Invader.dead) {
-                            if(Math.sqrt((Invader.x - Bullet.x) * (Invader.x - Bullet.x) + (Invader.y - Bullet.y) * (Invader.y - Bullet.y)) < 15) {
+                        //if(Invader.type =='explosion') continue;
+                        if((Bullet.faction == 0) && Invader && !Invader.dead && Invader.type != 'explosion') {
+                            if(Math.sqrt((Invader.x - Bullet.x) * (Invader.x - Bullet.x) + (Invader.y - Bullet.y) * (Invader.y - Bullet.y)) < (Bullet.r + Invader.radius)) {
                                 this.removeIndex(Bullet.index);
                                 InvaderPool.objects[j].life -= Bullet.dmg;
+                                InvaderPool.addNew({
+                                    life: 0,
+                                    x: Bullet.x,
+                                    y: Bullet.y,
+                                    dead: false,
+                                    type: "explosion",
+                                    count : 0
+                                });
                                 if(InvaderPool.objects[j].life <= 0) {
+                                    /*InvaderPool.addNew({
+                                        life: 0,
+                                        x: Invader.x,
+                                        y: Invader.y,
+                                        dead: false,
+                                        type: "explosion",
+                                        count : 0
+                                    });*/
                                     InvaderPool.removeIndex(Invader.index);
+                                    //InvaderPool.objects[j].type = "explosion";
                                     //InvaderPool.objects[j].dead = true;
                                     Hud.goal--;
                                     Hud.score++;
                                 }
-                               if(Hud.goal == 0) {
+                                /*if(InvaderPool.objects[j].life == 0) {
+                                    InvaderPool.objects[j].dead = true;
+                                }*/
+                                if(Hud.goal == 0) {
                                     //Game.gameOver = true;
                                     //Screen.gamewin();
                                     //Game.canvas.addEventListener('click', Game.restartGame, false);
@@ -576,6 +646,7 @@
             this.open = 0;
             this.end = 0;
             this.left = true;//MOVE THIS
+            this.count = 0; //MOVE THIS
         },
 
         draw: function() {
@@ -588,50 +659,28 @@
                     //Move this code into object, rather than pool
                     if(A.type == "ship") {
                         A.y += 1;
-
-                        ctx.beginPath();
-                        ctx.moveTo(A.x, A.y + 15);
-                        ctx.lineTo(A.x - 10, A.y - 10);
-                        ctx.lineTo(A.x + 10, A.y - 10);
-                        ctx.closePath();
-                        if(A.life == 1) ctx.fillStyle = '#eee';
-                        if(A.life == 2) ctx.fillStyle = 'blue';
-                        ctx.fill();
-                    }
-                    else {
-                        if(A.y < 100) A.y += 1;
-                        else {
-                            if(this.left) A.x += 1;
-                            else A.x -= 1;
-
-                            if(A.x == 450) this.left = false;
-                            if(A.x == 150) this.left = true;
+                        ctx.drawImage(AssetLoader.ships, 0, 0, 25, 25, A.x-12, A.y-12, 25, 25);
+                        ctx.drawImage(AssetLoader.effects, A.fcount, 50, 10, 15, A.x-5, A.y-27, 10, 15);
+                        if(Game.FrameCount %10 == 0) {
+                            A.fcount += 10;
+                            if(A.fcount == 30) A.fcount = 0;
                         }
-                
-                        ctx.beginPath();
-                        ctx.moveTo(A.x, A.y + 25);
-                        ctx.lineTo(A.x - 20, A.y - 20);
-                        ctx.lineTo(A.x + 20, A.y - 20);
-                        ctx.closePath();
-                        ctx.fillStyle = '#eee';
-                        ctx.fill();
-
-                        this.bossReset--;
-
-                        if(this.bossReset == 0) {
-                            this.bossReset = 20;
-                            var newBullet = {
-                                faction: 1,
-                                x: A.x,
-                                y: A.y + 25,
-                                xs: 0,
-                                ys: 10,
-                                r: 12,
-                                dmg: 1,
-                                color: 'orange'
-                            };
-                            BulletPool.addNew(newBullet);
+                    } else if(A.type == 'explosion') {
+                        ctx.drawImage(AssetLoader.effects, A.count, 0, 50, 50, A.x - 25, A.y - 25, 50, 50);
+                        if(Game.FrameCount % 3 == 0) {
+                            A.count += 50;
+                            if(A.count == 300) {
+                                A.count = 0;
+                                InvaderPool.removeIndex(A.index);
+                            }
                         }
+                    } else {
+                        ctx.drawImage(AssetLoader.ships, 25, 0, 100, 100, A.x-50, A.y-50, 100, 100);
+                        /*ctx.drawImage(AssetLoader.effects, A.fcount, 50, 10, 15, A.x-5, A.y-65, 10, 15);
+                        if(Game.FrameCount %10 == 0) {
+                            A.fcount += 10;
+                            if(A.fcount == 30) A.fcount = 0;
+                        }*/
                     }
 
                     /*if(A.y > Game.height - 30) {
@@ -699,7 +748,7 @@
 
             //this.ready = false;
 
-            this.hSeg = new Image();
+            /*this.hSeg = new Image();
             this.hSeg.src = 'heath_segment.png';
             this.hSegEmpty = new Image();
             this.hSegEmpty.src = "heath_segment_empty.png";
@@ -711,6 +760,8 @@
             this.hudLeft.src = 'hud_left.png';
             this.hudRight = new Image();
             this.hudRight.src = 'hud_right.png';
+            this.uiSegments = new Image();
+            this.uiSegments.src = 'ui-segments.png';*/
 
             /*this.hSeg.onload = function() {
                 this.ready = true;
@@ -719,32 +770,36 @@
 
         draw: function() {
             if(Game.gameOver) return;
-            ctx.drawImage(AssetLoader.hudLeft, 0, 0);
-            ctx.drawImage(AssetLoader.hudRight, Game.width - 100, 0);
+            //ctx.drawImage(AssetLoader.hudLeft, 0, 0);
+            //ctx.drawImage(AssetLoader.hudRight, Game.width - 100, 0);
 
-            ctx.font = '12px helvetica, arial';
+            /*ctx.font = '12px helvetica, arial';
             ctx.fillStyle = '#befbff';
             ctx.textAlign = 'left';
             ctx.fillText('Score: ' + this.score, 12, Game.height - 60);
             ctx.textAlign = 'left';
-            ctx.fillText('Level: ' + this.level, 12, Game.height - 75);
-            for(var i = 0; i < 4; i++) {
-                var LostHealth = 4 - Ship.health;
-                if(i < LostHealth) {
-                    ctx.drawImage(AssetLoader.hSegEmpty, 14, 10 + i * 80);
-                } else {
-                    ctx.drawImage(AssetLoader.hSeg, 14, 10 + i * 80);
-                }
+            ctx.fillText('Level: ' + this.level, 12, Game.height - 75);*/
+            for(var i = 0; i < Ship.health; i++) {
+                //var LostHealth = 4 - Ship.health;
+                //if(i < LostHealth) {
+                //    ctx.drawImage(AssetLoader.hSegEmpty, 14, 10 + i * 80);
+                //} else {
+                    ctx.drawImage(AssetLoader.uiSegments, 0, 0, 20, 50, 10, 10 + i * 55, 20, 50);
+                //}
             }
 
-            for(var i = 0; i < 8; i++) {
+            for(var i = 0; i < Ship.shields; i++) {
+                ctx.drawImage(AssetLoader.uiSegments, 20, 0, 20, 50, 35, 10 + i * 55, 20, 50);
+            }
+
+            /*for(var i = 0; i < 8; i++) {
                 var LostShields = 8 - Ship.shields;
                 if(i < LostShields) {
                     ctx.drawImage(AssetLoader.sSegEmpty, 36, 77 + i * 30);
                 } else {
                     ctx.drawImage(AssetLoader.sSeg, 36, 77 + i * 30);
                 }
-            }
+            }*/
         }
     };
 
