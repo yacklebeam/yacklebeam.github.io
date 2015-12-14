@@ -399,10 +399,10 @@
             this.jukebox["whoa"].volume = .5;
             this.jukebox["whoa"].load();*/
 
-            this.jukebox["beats"] = new Audio("aud/electro-track.mp3");
+            /*this.jukebox["beats"] = new Audio("aud/electro-track.mp3");
             this.jukebox["beats"].volume = .3;
             this.jukebox["beats"].loop = true;
-            this.jukebox["beats"].load();
+            this.jukebox["beats"].load();*/
         },
         play: function(x) {
             this.jukebox[x].play();
@@ -525,6 +525,7 @@
             };
         },
         updateNode: function(x, sender) {
+            console.log("updating " + x + " from " + sender);
             switch (this.nodetypes[x]) {
                 case "base":
                     if (!(this.nodeteams[x] === undefined)) {
@@ -577,7 +578,7 @@
                             var indexInPathsList = bList[i];
                             var indexOfNeighbor = levelarray[Game.level].paths[indexInPathsList].a;
                             if (indexOfNeighbor == x || indexOfNeighbor == rTeammates[j]) indexOfNeighbor = levelarray[Game.level].paths[indexInPathsList].b;
-                            if (indexOfNeighbor != sender) LevelRenderer.updateNode(indexOfNeighbor, x);
+                            if (indexOfNeighbor != sender) LevelRenderer.updateNode(indexOfNeighbor, rTeammates[j]);
                         }
                     }
                     break;
