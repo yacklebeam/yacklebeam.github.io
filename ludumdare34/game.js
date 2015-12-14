@@ -235,13 +235,14 @@
                 draw: function() {
                     // ctx.save();
 
+                    if(Player.dead) {
+                        LevelRenderer.init(Game.level);
+                        Player.init();
+                    }
+
 
                     if (LevelRenderer.notresolvedCount > 0) {
                         //REGULAR PLAY
-                        if(Player.dead) {
-                            LevelRenderer.init(Game.level);
-                            Player.init();
-                        }
                         Player.update();
                         this.framereference = Game.frameCount;
                         LevelRenderer.draw();
