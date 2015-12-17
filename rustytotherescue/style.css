@@ -1,17 +1,27 @@
 body {
    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
    font-weight: 100;
-   background-color: #ffffe8;
+   background-color: #eee2d2;
 }
 
 p {
 	font-size: 16px;
-	color: #999999;
+	color: #444444;
+}
+
+.text-blurb {
+    color: #444444;
+}
+
+#about {
+  text-align: left;
+  color: #005100;
+  font-weight: bold;
 }
 
 hr {
 	border-width: 1px;
-	/*border-color: #333333;*/
+	border-color: #e1cbc6;
 }
 
 h3 {
@@ -26,7 +36,9 @@ h3 {
 	-moz-border-radius: 25px;
 	border-width: 4px;
 	border-style: solid;
-	border-color: #0c892b;
+	border-color: #005100;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .banner {
@@ -48,20 +60,20 @@ CUSTOM NAVBAR
 **********/
 
 .navbar-default {
-  background-color: #0c892b;
-  border-color: #3dcc41;
+  background-color: #005100;
+  border-color: #005100;
 }
 .navbar-default .navbar-brand {
-  color: #ecf0f1;
+  color: #ffffff;
 }
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-  color: #ecf0f1;
+  color: #ffffff;
 }
 .navbar-default .navbar-text {
-  color: #ecf0f1;
+  color: #ffffff;
 }
 .navbar-default .navbar-nav > li > a {
-  color: #ecf0f1;
+  color: #ffffff;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
   color: #dbffcd;
@@ -81,14 +93,14 @@ CUSTOM NAVBAR
   background-color: #3dcc41;
 }
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #ecf0f1;
+  background-color: #ffffff;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
-  border-color: #ecf0f1;
+  border-color: #ffffff;
 }
 .navbar-default .navbar-link {
-  color: #ecf0f1;
+  color: #ffffff;
 }
 .navbar-default .navbar-link:hover {
   color: #dbffcd;
@@ -96,7 +108,7 @@ CUSTOM NAVBAR
 
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-    color: #ecf0f1;
+    color: #ffffff;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
     color: #dbffcd;
