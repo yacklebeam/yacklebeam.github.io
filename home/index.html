@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>H O M E</title>
+    <link href="style.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+<div id="clock">
+	<h2 id="time"></h2>
+</div>
+
+<script>
+function updateClock() {
+    var now = new Date();
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var hourImages = [7,7,7,8,8,8,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6];
+
+    var curHour = now.getHours();
+    if(curHour < 12) period = "AM";
+    else period = "PM";
+
+    var displayHour = curHour;
+    if(curHour > 12) displayHour -= 12;
+    if(curHour == 0) displayHour = 12;
+    
+    var curMinutes = now.getMinutes();
+    if(curMinutes < 10) curMinutes = "0" + curMinutes;
+
+    var time = displayHour + ':' + curMinutes + ' ' + period;
+    
+    var date = [now.getDate(), 
+                months[now.getMonth()],
+                now.getFullYear()].join(' ');
+
+	document.body.style.backgroundImage = "url('img/"+hourImages[curHour]+".png')";
+    document.getElementById('time').innerHTML = [date, time].join(' / ');
+
+    setTimeout(updateClock, 6000);
+}
+updateClock();
+</script>
+
+</body>
+
+</html>
