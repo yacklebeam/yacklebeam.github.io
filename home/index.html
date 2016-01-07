@@ -36,7 +36,7 @@ function updateClock() {
                 months[now.getMonth()],
                 now.getFullYear()].join(' ');
 
-	document.body.style.backgroundImage = "url('img/"+hourImages[curHour]+".png')";
+    document.body.style.backgroundImage = "url('img/"+hourImages[curHour]+".png')";
     document.getElementById('time').innerHTML = [date, time].join(' / ');
 
     setTimeout(updateClock, 6000);

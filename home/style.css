@@ -1,10 +1,18 @@
 h2 {
-	color: #FFFFFF;
+	color: #ffffcc;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 64px;
 }
 
 #clock {
 	width:680px;
-	margin: 80 auto;
+	height:100px;
+
+	position: absolute;
+	top: 0;
+	bottom: 300;
+	right: 0;
+	left: 0;
+
+	margin: auto;
 }
