@@ -28,8 +28,11 @@ function updateClock() {
     if(curMinutes < 10) curMinutes = "0" + curMinutes;
 
     var time = displayHour + ':' + curMinutes + ' ' + period;
+
+    var curDay = now.getDate();
+    if(curDay < 10) curDay = '0' + curDay;
     
-    var date = [now.getDate(), 
+    var date = [curDay,
                 months[now.getMonth()],
                 now.getFullYear()].join(' ');
 
