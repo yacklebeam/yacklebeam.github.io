@@ -1,8 +1,13 @@
+@font-face {
+  font-family: 'BebasNeueWeb';
+  src: url('BebasNeue Book.otf');
+}
+
 #time {
 	color: #ffffcc;
-	font-family: 'Bebas Kai', 'Ubuntu', sans-serif;
+	font-family: 'BebasNeueWeb', 'Ubuntu', sans-serif;
 	font-weight: 300;
-	font-size: 72px;
+	font-size: 100px;
 	text-align: center;
 }
 
